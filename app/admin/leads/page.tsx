@@ -1,4 +1,5 @@
 import { getContactSubmissionsForAdmin } from "../../../lib/contact";
+import { DeleteLeadButton } from "../../components/admin/DeleteLeadButton";
 
 function formatDate(dateStr: string) {
   return new Date(dateStr).toLocaleDateString("en-US", {
@@ -26,30 +27,38 @@ export default async function AdminLeadsPage() {
         {submissions.length === 0 ? (
           <div className="admin-empty">No contact form submissions yet.</div>
         ) : (
-          <table className="admin-table">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Phone</th>
-                <th>Users</th>
-                <th>Message</th>
-                <th>Date</th>
-              </tr>
-            </thead>
-            <tbody>
-              {submissions.map((s) => (
-                <tr key={s.id}>
-                  <td className="admin-title-cell">{s.name}</td>
-                  <td>
-                    <a href={`tel:${s.phone}`}>{s.phone}</a>
-                  </td>
-                  <td>{s.users || "-"}</td>
-                  <td style={{ maxWidth: 320, whiteSpace: "pre-wrap" }}>{s.message || "-"}</td>
-                  <td>{formatDate(s.created_at)}</td>
+          <div className="admin-table-scroll">
+            <table className="admin-table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Phone</th>
+                  <th>Users</th>
+                  <th>Message</th>
+                  <th>Date</th>
+                  <th></th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {submissions.map((s) => (
+                  <tr key={s.id}>
+                    <td className="admin-title-cell">{s.name}</td>
+                    <td>
+                      <a href={`tel:${s.phone}`}>{s.phone}</a>
+                    </td>
+                    <td>{s.users || "-"}</td>
+                    <td style={{ maxWidth: 320, whiteSpace: "pre-wrap" }}>{s.message || "-"}</td>
+                    <td>{formatDate(s.created_at)}</td>
+                    <td>
+                      <div className="admin-row-actions">
+                        <DeleteLeadButton id={s.id} name={s.name} />
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         )}
       </div>
     </div>

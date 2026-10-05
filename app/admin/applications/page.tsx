@@ -1,4 +1,5 @@
 import { getApplicationsForAdmin, getAllJobsForAdmin } from "../../../lib/jobs";
+import { DeleteApplicationButton } from "../../components/admin/DeleteApplicationButton";
 
 function formatDate(dateStr: string) {
   return new Date(dateStr).toLocaleDateString("en-US", {
@@ -60,49 +61,57 @@ export default async function AdminApplicationsPage({ searchParams }: { searchPa
         {applications.length === 0 ? (
           <div className="admin-empty">No applications found.</div>
         ) : (
-          <table className="admin-table">
-            <thead>
-              <tr>
-                <th>Applicant</th>
-                <th>Job</th>
-                <th>Expected Salary</th>
-                <th>Date Applied</th>
-                <th>CV</th>
-              </tr>
-            </thead>
-            <tbody>
-              {applications.map((app) => (
-                <tr key={app.id}>
-                  <td>
-                    <div className="admin-applicant-cell">
-                      <div className="admin-applicant-avatar">{initials(app.name)}</div>
-                      <div>
-                        <div className="admin-title-cell" style={{ fontSize: 15 }}>{app.name}</div>
-                        <div style={{ fontSize: 13, color: "var(--text-2)" }}>{app.email}</div>
-                        {app.phone && <div style={{ fontSize: 13, color: "var(--text-2)" }}>{app.phone}</div>}
-                      </div>
-                    </div>
-                  </td>
-                  <td>
-                    <span className="admin-job-badge">{getJobTitle(app)}</span>
-                  </td>
-                  <td>{app.expected_salary || "-"}</td>
-                  <td>{formatDate(app.created_at)}</td>
-                  <td>
-                    <a
-                      href={app.cv_url}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="btn btn-outline"
-                      style={{ padding: "4px 8px", fontSize: 12 }}
-                    >
-                      View PDF
-                    </a>
-                  </td>
+          <div className="admin-table-scroll">
+            <table className="admin-table">
+              <thead>
+                <tr>
+                  <th>Applicant</th>
+                  <th>Job</th>
+                  <th>Expected Salary</th>
+                  <th>Date Applied</th>
+                  <th>CV</th>
+                  <th></th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {applications.map((app) => (
+                  <tr key={app.id}>
+                    <td>
+                      <div className="admin-applicant-cell">
+                        <div className="admin-applicant-avatar">{initials(app.name)}</div>
+                        <div>
+                          <div className="admin-title-cell" style={{ fontSize: 15 }}>{app.name}</div>
+                          <div style={{ fontSize: 13, color: "var(--text-2)" }}>{app.email}</div>
+                          {app.phone && <div style={{ fontSize: 13, color: "var(--text-2)" }}>{app.phone}</div>}
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <span className="admin-job-badge">{getJobTitle(app)}</span>
+                    </td>
+                    <td>{app.expected_salary || "-"}</td>
+                    <td>{formatDate(app.created_at)}</td>
+                    <td>
+                      <a
+                        href={app.cv_url}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="btn btn-outline"
+                        style={{ padding: "4px 8px", fontSize: 12 }}
+                      >
+                        View PDF
+                      </a>
+                    </td>
+                    <td>
+                      <div className="admin-row-actions">
+                        <DeleteApplicationButton id={app.id} name={app.name} />
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         )}
       </div>
     </div>

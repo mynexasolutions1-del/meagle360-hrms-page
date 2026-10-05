@@ -2234,6 +2234,51 @@
       .admin-row-actions .danger:hover {
         background: rgba(239, 68, 68, 0.1);
       }
+      .admin-icon-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 32px;
+        padding: 0;
+        border-radius: 8px;
+        border: 1px solid transparent;
+        background: none;
+        cursor: pointer;
+        color: var(--text-2);
+        transition: all 0.2s ease;
+        flex-shrink: 0;
+      }
+      .admin-icon-btn:hover {
+        background: rgba(79, 70, 229, 0.1);
+        color: var(--primary);
+      }
+      .admin-icon-btn.danger {
+        color: #ef4444;
+      }
+      .admin-icon-btn.danger:hover {
+        background: rgba(239, 68, 68, 0.1);
+        border-color: rgba(239, 68, 68, 0.2);
+      }
+      .admin-icon-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+      .admin-icon-btn-spinner {
+        width: 14px;
+        height: 14px;
+        border: 2px solid rgba(239, 68, 68, 0.25);
+        border-top-color: #ef4444;
+        border-radius: 50%;
+        animation: adminSpin 0.6s linear infinite;
+      }
+      @keyframes adminSpin {
+        to { transform: rotate(360deg); }
+      }
+      .admin-table-scroll {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+      }
       .admin-empty {
         padding: 80px 24px;
         text-align: center;
@@ -2531,6 +2576,83 @@
         }
         .admin-container {
           padding: 32px 16px 60px;
+        }
+      }
+
+      /* Admin dashboard responsiveness. Below 900px the fixed 260px side
+         rail no longer fits alongside content, so it collapses into a
+         horizontally-scrollable top bar instead of a full-height sidebar. */
+      @media (max-width: 900px) {
+        .admin-main {
+          flex-direction: column;
+        }
+        .admin-sidebar {
+          width: 100%;
+          height: auto;
+          position: sticky;
+          top: 0;
+          flex-direction: row;
+          align-items: center;
+          gap: 20px;
+          padding: 14px 16px;
+          overflow-x: auto;
+          -webkit-overflow-scrolling: touch;
+        }
+        .admin-sidebar .brand {
+          flex-shrink: 0;
+        }
+        .admin-sidebar-nav {
+          flex-direction: row;
+          align-items: center;
+          gap: 4px;
+          flex: none;
+          white-space: nowrap;
+        }
+        .admin-sidebar-nav a {
+          padding: 8px 12px;
+          white-space: nowrap;
+        }
+        .admin-user-email {
+          display: none;
+        }
+        .admin-sidebar-nav form {
+          margin-top: 0 !important;
+        }
+        .admin-sidebar-nav form button {
+          width: auto;
+          white-space: nowrap;
+        }
+      }
+
+      @media (max-width: 640px) {
+        .admin-header-row h1 {
+          font-size: 24px;
+        }
+        .admin-table th,
+        .admin-table td {
+          padding: 12px 14px;
+          font-size: 13.5px;
+        }
+        .admin-table td.admin-title-cell {
+          font-size: 14px;
+        }
+        .admin-filter-row {
+          flex-wrap: wrap;
+        }
+        .admin-filter-select {
+          min-width: 0;
+          flex: 1;
+        }
+        .admin-applicant-cell {
+          gap: 8px;
+        }
+        .admin-applicant-avatar {
+          width: 32px;
+          height: 32px;
+          font-size: 11px;
+        }
+        .admin-row-actions {
+          gap: 8px;
         }
       }
 
