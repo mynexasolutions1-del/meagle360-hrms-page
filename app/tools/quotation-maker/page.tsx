@@ -4,7 +4,7 @@ import { SiteChrome } from "../../components/SiteChrome";
 import { QuotationMakerTool } from "../../components/QuotationMakerTool";
 import { FaqAccordion } from "../../components/FaqAccordion";
 
-const SITE_URL = "https://meagle360.com"; // Change to actual site URL
+const SITE_URL = "https://www.meagle360.com";
 
 export const metadata: Metadata = {
   title: "Free Quotation Maker & Online Quotation Generator",
@@ -19,7 +19,7 @@ export const metadata: Metadata = {
     siteName: "Meagle 360",
     images: [
       {
-        url: `${SITE_URL}/og-quotation-maker.webp`,
+        url: `${SITE_URL}/quotation-maker.webp`,
         width: 1200,
         height: 630,
       },

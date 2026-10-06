@@ -100,9 +100,16 @@ export default async function FeaturePage({
           <p style={{ fontSize: 18, color: "rgba(255,255,255,0.85)", margin: "0 0 28px" }}>
             {feature.heroSubhead}
           </p>
-          <a href="/demo" className="btn btn-white">
-            Book a 15-min demo
-          </a>
+          <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
+            <a href="/demo" className="btn btn-white">
+              Book a 15-min demo
+            </a>
+            {feature.heroSecondaryCta && (
+              <a href={feature.heroSecondaryCta.href} className="btn btn-outline" style={{ borderColor: "rgba(255,255,255,0.5)", color: "#fff" }}>
+                {feature.heroSecondaryCta.label}
+              </a>
+            )}
+          </div>
         </div>
       </section>
 

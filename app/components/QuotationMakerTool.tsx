@@ -83,7 +83,7 @@ export function QuotationMakerTool() {
     <div className="unified-qm-container">
       <div className="unified-qm-paper" style={{ borderColor: primaryColor }} id="printable-quotation">
         
-        <h1 className="unified-qm-title" style={{ color: primaryColor }}>Quotation</h1>
+        <div className="unified-qm-title" style={{ color: primaryColor }}>Quotation</div>
         
         {/* SECTION 1: Top Grid */}
         <div className="unified-qm-section top-grid">
@@ -316,7 +316,7 @@ export function QuotationMakerTool() {
           </div>
 
           <div className="print-right-col">
-            <h1 style={{ color: primaryColor }}>QUOTATION</h1>
+            <div className="print-doc-title" style={{ color: primaryColor }}>QUOTATION</div>
             <table className="print-meta-table">
               <tbody>
                 <tr><td>Quotation #</td><td>{meta.quoteNo || "QT-001"}</td></tr>

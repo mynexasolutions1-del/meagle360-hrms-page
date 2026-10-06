@@ -8,6 +8,7 @@ import { BlogCtaSection } from "../../components/BlogCtaSection";
 import { FaqAccordion } from "../../components/FaqAccordion";
 import { sanitizePostContent } from "../../../lib/sanitize";
 import { calculateReadingTime } from "../../../lib/blog-types";
+import { TemplateDownloadGate } from "../../components/TemplateDownloadGate";
 
 export const revalidate = 60;
 
@@ -16,6 +17,15 @@ const SITE_URL = "https://www.meagle360.com";
 function wordCount(html: string): number {
   const text = html.replace(/<[^>]*>/g, " ").trim();
   return text ? text.split(/\s+/).length : 0;
+}
+
+// Splits sanitized content right after its first </p>, so a download gate
+// (or any other insert) can sit "below the first paragraph" instead of only
+// ever being prependable/appendable to the whole block.
+function splitAfterFirstParagraph(html: string): { before: string; after: string } {
+  const match = html.match(/^[\s\S]*?<\/p>/);
+  if (!match) return { before: html, after: "" };
+  return { before: match[0], after: html.slice(match[0].length) };
 }
 
 function formatDate(dateStr: string | null) {
@@ -71,6 +81,10 @@ export default async function BlogPostPage({
   if (!post) notFound();
 
   const cleanContent = sanitizePostContent(post.content);
+  const hasDownload = Boolean(post.download_xlsx_url || post.download_sheets_url);
+  const { before: contentBeforeGate, after: contentAfterGate } = hasDownload
+    ? splitAfterFirstParagraph(cleanContent)
+    : { before: cleanContent, after: "" };
   const relatedPosts = await getRelatedPosts(post.category, post.id);
   const readingTime = calculateReadingTime(post.content);
   const formattedDate = formatDate(post.published_at || post.created_at);
@@ -177,10 +191,18 @@ export default async function BlogPostPage({
               </div>
             )}
 
-            <div
-              className="blog-content"
-              dangerouslySetInnerHTML={{ __html: cleanContent }}
-            />
+            <div className="blog-content">
+              {hasDownload ? (
+                <>
+                  <div dangerouslySetInnerHTML={{ __html: contentBeforeGate }} />
+                  <TemplateDownloadGate source={post.slug} />
+                  <div dangerouslySetInnerHTML={{ __html: contentAfterGate }} />
+                  <TemplateDownloadGate source={post.slug} heading="Still haven't grabbed the template?" />
+                </>
+              ) : (
+                <div dangerouslySetInnerHTML={{ __html: cleanContent }} />
+              )}
+            </div>
           </div>
         </div>
       </section>

@@ -32,7 +32,9 @@ export function sanitizePostContent(html: string): string {
       "td",
     ],
     allowedAttributes: {
-      a: ["href", "target", "rel"],
+      // "class" is scoped to trusted, button-style CTA links written by us
+      // (e.g. class="btn btn-primary") — blog content is never public-submitted.
+      a: ["href", "target", "rel", "class"],
       img: ["src", "alt", "width", "height"],
       span: ["class"],
       pre: ["class"],

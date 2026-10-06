@@ -18,6 +18,13 @@ create table if not exists posts (
   -- Optional FAQPage rich-result data: [{ "q": "...", "a": "..." }, ...].
   -- Rendered as FAQPage JSON-LD on the post page when present.
   faq_json jsonb,
+  -- Optional gated lead-magnet download (e.g. a free template). When
+  -- download_xlsx_url or download_sheets_url is set, the blog post page
+  -- renders a download-gate form (name/work email/company size) before
+  -- revealing these links. Null on every ordinary post.
+  download_xlsx_url text,
+  download_xlsx_filename text,
+  download_sheets_url text,
   published boolean not null default false,
   published_at timestamptz,
   created_at timestamptz not null default now(),
@@ -140,5 +147,33 @@ create policy "Public can insert contact submissions"
 -- Only Admin can read/manage contact submissions
 create policy "Admin can manage all contact submissions"
   on contact_submissions for all
+  using (auth.jwt() ->> 'email' = 'YOUR_ADMIN_EMAIL')
+  with check (auth.jwt() ->> 'email' = 'YOUR_ADMIN_EMAIL');
+
+-- Template Downloads Table (gated lead-magnet downloads, e.g. the free
+-- employee database template post). Kept separate from contact_submissions
+-- since the form fields differ (no phone) and it's useful to see which
+-- blog post ("source") actually produces leads.
+create table if not exists template_downloads (
+  id uuid primary key default gen_random_uuid(),
+  name text not null,
+  work_email text not null,
+  company_size text,
+  source text not null,
+  created_at timestamptz not null default now()
+);
+
+create index if not exists template_downloads_created_at_idx on template_downloads (created_at desc);
+
+alter table template_downloads enable row level security;
+
+-- Anyone can submit the download form
+create policy "Public can insert template downloads"
+  on template_downloads for insert
+  with check (true);
+
+-- Only Admin can read/manage template download leads
+create policy "Admin can manage all template downloads"
+  on template_downloads for all
   using (auth.jwt() ->> 'email' = 'YOUR_ADMIN_EMAIL')
   with check (auth.jwt() ->> 'email' = 'YOUR_ADMIN_EMAIL');

@@ -11,6 +11,9 @@ export type Post = {
   seo_keywords: string | null;
   canonical_url: string | null;
   faq_json: { q: string; a: string }[] | null;
+  download_xlsx_url: string | null;
+  download_xlsx_filename: string | null;
+  download_sheets_url: string | null;
   published: boolean;
   published_at: string | null;
   created_at: string;
