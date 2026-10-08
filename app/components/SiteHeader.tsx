@@ -8,7 +8,6 @@ import { triggerRipple } from "../lib/ripple";
 const NAV_LINKS = [
   { href: "/", label: "Home", id: "home" },
   { href: "/pricing", label: "Pricing", id: "pricing" },
-  { href: "/blog", label: "Blog", id: "blog" },
   { href: "/contact", label: "Contact", id: "contact" },
   { href: "/careers", label: "Careers", id: "careers" },
 ];
@@ -17,6 +16,11 @@ const TOOL_LINKS = [
   { href: "/tools/payslip-generator", label: "Payslip Generator" },
   { href: "/tools/ctc-to-in-hand-calculator", label: "CTC to In-Hand Calculator" },
   { href: "/tools/quotation-maker", label: "Quotation Maker" },
+];
+
+const RESOURCE_LINKS = [
+  { href: "/blog", label: "Blog" },
+  { href: "/templates", label: "HR Templates" },
 ];
 
 export function SiteHeader({
@@ -39,17 +43,27 @@ export function SiteHeader({
   const isPricing = pathname === "/pricing";
   const isCareers = pathname?.startsWith("/careers");
   const isTools = pathname?.startsWith("/tools");
+  const isResources = !!isBlog || pathname?.startsWith("/templates");
   const isFeatures = pathname?.startsWith("/features");
 
   const [toolsOpen, setToolsOpen] = useState(false);
+  const [resourcesOpen, setResourcesOpen] = useState(false);
 
-  // Keep the Tools submenu from staying open when the mobile nav itself closes.
+  // Keep dropdown submenus from staying open when the mobile nav itself closes.
   useEffect(() => {
-    if (!navOpen) setToolsOpen(false);
+    if (!navOpen) {
+      setToolsOpen(false);
+      setResourcesOpen(false);
+    }
   }, [navOpen]);
 
   function handleToolLinkClick() {
     setToolsOpen(false);
+    onNavLinkClick();
+  }
+
+  function handleResourceLinkClick() {
+    setResourcesOpen(false);
     onNavLinkClick();
   }
 
@@ -111,10 +125,31 @@ export function SiteHeader({
             </div>
           </div>
 
+          <div className={`nav-item${resourcesOpen ? " open" : ""}`}>
+            <button
+              type="button"
+              className={`nav-link${isResources ? " active" : ""}`}
+              onClick={() => setResourcesOpen((o) => !o)}
+              aria-expanded={resourcesOpen}
+              aria-haspopup="true"
+            >
+              Resources
+              <svg className="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M6 9l6 6 6-6" />
+              </svg>
+            </button>
+            <div className="dropdown">
+              {RESOURCE_LINKS.map((resource) => (
+                <a key={resource.href} href={resource.href} onClick={handleResourceLinkClick}>
+                  {resource.label}
+                </a>
+              ))}
+            </div>
+          </div>
+
           {NAV_LINKS.filter((l) => l.id !== "home" && l.id !== "pricing").map((link) => {
             let isActive = false;
-            if (link.id === "blog") isActive = !!isBlog;
-            else if (link.id === "contact") isActive = isContact;
+            if (link.id === "contact") isActive = isContact;
             else if (link.id === "careers") isActive = !!isCareers;
 
             return (

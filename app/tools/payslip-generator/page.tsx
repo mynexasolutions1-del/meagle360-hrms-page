@@ -3,6 +3,7 @@ import Image from "next/image";
 import { SiteChrome } from "../../components/SiteChrome";
 import { FaqAccordion } from "../../components/FaqAccordion";
 import { PayslipGeneratorTool } from "../../components/PayslipGeneratorTool";
+import { TemplateAccessGate } from "../../components/TemplateAccessGate";
 
 const TITLE = "Free Salary Slip Generator & Payslip Generator";
 const DESCRIPTION =
@@ -232,6 +233,16 @@ export default function PayslipGeneratorPage() {
               <p style={{ color: '#64748b', fontSize: '1.1rem', lineHeight: 1.5 }}>Download your salary slip PDF instantly, ready to share.</p>
             </div>
           </div>
+        </div>
+      </section>
+
+      <section className="section" style={{ padding: '48px 0', background: '#f8fafc' }}>
+        <div className="container" style={{ maxWidth: 640 }}>
+          <div className="section-head" style={{ textAlign: "center", marginBottom: 24 }}>
+            <h2 style={{ fontSize: 28 }}>Prefer a Blank Template Instead?</h2>
+            <p>Skip the generator and fill in a payslip template by hand — free in Word, PDF and Excel.</p>
+          </div>
+          <TemplateAccessGate source="/tools/payslip-generator" />
         </div>
       </section>
 

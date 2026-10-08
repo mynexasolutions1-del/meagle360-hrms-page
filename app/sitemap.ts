@@ -2,6 +2,7 @@ import type { MetadataRoute } from "next";
 import { getPublishedPosts } from "../lib/posts";
 import { getAllJobs } from "../lib/jobs";
 import { FEATURE_PAGES } from "../lib/features-data";
+import { getPublishedHrTemplates } from "../lib/hr-templates";
 
 const BASE = "https://www.meagle360.com";
 
@@ -23,6 +24,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE}/tools/payslip-generator`, priority: 0.8, changeFrequency: "monthly" },
     { url: `${BASE}/tools/ctc-to-in-hand-calculator`, priority: 0.8, changeFrequency: "monthly" },
     { url: `${BASE}/tools/quotation-maker`, priority: 0.8, changeFrequency: "monthly" },
+    { url: `${BASE}/templates`, priority: 0.8, changeFrequency: "weekly" },
   ];
 
   const posts = await getPublishedPosts();
@@ -46,5 +48,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8,
   }));
 
-  return [...statics, ...postRoutes, ...jobRoutes, ...featureRoutes];
+  const hrTemplates = await getPublishedHrTemplates();
+  const hrTemplateRoutes: MetadataRoute.Sitemap = hrTemplates.map((t) => ({
+    url: `${BASE}/templates/${t.slug}`,
+    lastModified: t.updated_at ? new Date(t.updated_at) : undefined,
+    changeFrequency: "monthly",
+    priority: 0.7,
+  }));
+
+  return [...statics, ...postRoutes, ...jobRoutes, ...featureRoutes, ...hrTemplateRoutes];
 }

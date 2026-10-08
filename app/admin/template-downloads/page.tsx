@@ -1,6 +1,13 @@
 import { getTemplateDownloadsForAdmin } from "../../../lib/template-downloads";
 import { DeleteTemplateDownloadButton } from "../../components/admin/DeleteTemplateDownloadButton";
 
+// Older leads (the free-employee-database-template gate) store just a blog
+// slug in `source`; newer leads (the /templates library gate) store a full
+// path like "/templates/offer-letter" so it's self-describing either way.
+function sourceHref(source: string) {
+  return source.startsWith("/") ? source : `/blog/${source}`;
+}
+
 function formatDate(dateStr: string) {
   return new Date(dateStr).toLocaleDateString("en-US", {
     month: "short",
@@ -33,6 +40,7 @@ export default async function AdminTemplateDownloadsPage() {
                 <tr>
                   <th>Name</th>
                   <th>Work Email</th>
+                  <th>Phone</th>
                   <th>Company Size</th>
                   <th>Source Page</th>
                   <th>Date</th>
@@ -46,9 +54,10 @@ export default async function AdminTemplateDownloadsPage() {
                     <td>
                       <a href={`mailto:${d.work_email}`}>{d.work_email}</a>
                     </td>
+                    <td>{d.phone ? <a href={`tel:${d.phone}`}>{d.phone}</a> : "-"}</td>
                     <td>{d.company_size || "-"}</td>
                     <td>
-                      <a href={`/blog/${d.source}`} target="_blank" rel="noreferrer">
+                      <a href={sourceHref(d.source)} target="_blank" rel="noreferrer">
                         {d.source}
                       </a>
                     </td>

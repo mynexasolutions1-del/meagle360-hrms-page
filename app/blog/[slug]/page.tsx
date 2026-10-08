@@ -9,6 +9,7 @@ import { FaqAccordion } from "../../components/FaqAccordion";
 import { sanitizePostContent } from "../../../lib/sanitize";
 import { calculateReadingTime } from "../../../lib/blog-types";
 import { TemplateDownloadGate } from "../../components/TemplateDownloadGate";
+import { TemplateAccessGate } from "../../components/TemplateAccessGate";
 
 export const revalidate = 60;
 
@@ -82,9 +83,11 @@ export default async function BlogPostPage({
 
   const cleanContent = sanitizePostContent(post.content);
   const hasDownload = Boolean(post.download_xlsx_url || post.download_sheets_url);
-  const { before: contentBeforeGate, after: contentAfterGate } = hasDownload
+  const showPayslipTemplateGate = post.slug === "salary-slip-format";
+  const { before: contentBeforeGate, after: contentAfterGate } = hasDownload || showPayslipTemplateGate
     ? splitAfterFirstParagraph(cleanContent)
     : { before: cleanContent, after: "" };
+
   const relatedPosts = await getRelatedPosts(post.category, post.id);
   const readingTime = calculateReadingTime(post.content);
   const formattedDate = formatDate(post.published_at || post.created_at);
@@ -198,6 +201,12 @@ export default async function BlogPostPage({
                   <TemplateDownloadGate source={post.slug} />
                   <div dangerouslySetInnerHTML={{ __html: contentAfterGate }} />
                   <TemplateDownloadGate source={post.slug} heading="Still haven't grabbed the template?" />
+                </>
+              ) : showPayslipTemplateGate ? (
+                <>
+                  <div dangerouslySetInnerHTML={{ __html: contentBeforeGate }} />
+                  <TemplateAccessGate source={`/blog/${post.slug}`} />
+                  <div dangerouslySetInnerHTML={{ __html: contentAfterGate }} />
                 </>
               ) : (
                 <div dangerouslySetInnerHTML={{ __html: cleanContent }} />

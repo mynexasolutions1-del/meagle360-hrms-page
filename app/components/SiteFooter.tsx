@@ -29,6 +29,7 @@ const FOOTER_COLUMNS = [
       { label: "Careers", href: "/careers" },
       { label: "Contact Us", href: "/contact" },
       { label: "Blog", href: "/blog" },
+      { label: "HR Templates", href: "/templates" },
       { label: "Security", href: "/security" },
       { label: "Privacy Policy", href: "/privacy" },
       { label: "Terms of Service", href: "/terms" },

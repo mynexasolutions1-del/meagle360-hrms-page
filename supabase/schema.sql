@@ -159,6 +159,9 @@ create table if not exists template_downloads (
   name text not null,
   work_email text not null,
   company_size text,
+  -- Used by the /templates library gate (name/email/phone), null for the
+  -- original free-employee-database-template gate (name/email/company_size).
+  phone text,
   source text not null,
   created_at timestamptz not null default now()
 );
@@ -175,5 +178,49 @@ create policy "Public can insert template downloads"
 -- Only Admin can read/manage template download leads
 create policy "Admin can manage all template downloads"
   on template_downloads for all
+  using (auth.jwt() ->> 'email' = 'YOUR_ADMIN_EMAIL')
+  with check (auth.jwt() ->> 'email' = 'YOUR_ADMIN_EMAIL');
+
+-- HR Templates Library (/templates, /templates/[slug]) — downloadable HR
+-- letters, policies, forms and trackers. Files are hosted on ImageKit, not
+-- Supabase storage. Gated behind a name/email/phone lead form (see
+-- template_downloads above) rather than real user accounts; the real file
+-- URLs are only ever returned in that form's API response, never persisted
+-- client-side (no cookie, no localStorage) — a fresh visit always shows the
+-- form again, by design.
+create table if not exists hr_templates (
+  id uuid primary key default gen_random_uuid(),
+  slug text not null unique,
+  title text not null,
+  category text not null,
+  seo_title text,
+  seo_description text,
+  intro text not null,
+  content text not null,
+  faq_json jsonb,
+  -- [{ format: "docx", label: "Word (.docx)", url, filename }, ...]
+  files jsonb not null default '[]'::jsonb,
+  -- [{ label, href }, ...] -- links to matching feature pages / blog posts
+  related_links jsonb,
+  published boolean not null default true,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+create index if not exists hr_templates_published_idx on hr_templates (published);
+
+alter table hr_templates enable row level security;
+
+-- Anyone can read published template pages (the page text itself, not a
+-- bypass of the download gate -- the gate is enforced by the API route,
+-- which only returns real file URLs in direct response to a submitted
+-- name/email/phone form, never embedded in the page itself)
+create policy "Public can read published hr_templates"
+  on hr_templates for select
+  using (published = true);
+
+-- Only Admin can manage template pages
+create policy "Admin can manage all hr_templates"
+  on hr_templates for all
   using (auth.jwt() ->> 'email' = 'YOUR_ADMIN_EMAIL')
   with check (auth.jwt() ->> 'email' = 'YOUR_ADMIN_EMAIL');

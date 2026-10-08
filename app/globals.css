@@ -3171,7 +3171,23 @@
   font-size: 18px;
   font-weight: 700;
   color: var(--text-1);
+  margin: 0 0 8px;
+}
+.template-gate-subtitle {
+  font-size: 14px;
+  color: var(--text-2);
   margin: 0 0 16px;
+}
+.template-related-links {
+  background: rgba(15, 23, 42, 0.03);
+  border: 1px solid rgba(15, 23, 42, 0.06);
+  border-radius: var(--radius-md);
+  padding: 14px 18px;
+  margin: 24px 0;
+  font-size: 14.5px;
+}
+.template-related-links p {
+  margin: 0;
 }
 .template-gate-form {
   display: flex;
@@ -6424,9 +6440,14 @@
     padding: 0;
     visibility: visible !important;
     z-index: 9999;
-    background: white;
   }
   .print-only-quotation * {
     visibility: visible !important;
   }
+}
+
+.template-card-hover:hover {
+  transform: translateY(-4px) !important;
+  box-shadow: 0 12px 28px rgba(0,0,0,0.06) !important;
+  border-color: rgba(79, 70, 229, 0.3) !important;
 }
