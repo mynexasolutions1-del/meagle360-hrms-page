@@ -182,6 +182,7 @@ export const FEATURE_PAGES: FeaturePage[] = [
     relatedBlogSlugs: [
       "ai-transforming-attendance-tracking",
       "best-all-in-one-hrms-software-for-growing-businesses-in-2026",
+      "hrms-vs-excel",
     ],
     relatedFeatureSlug: "payroll-software",
     relatedFeatureLabel: "Payroll Software",
@@ -314,6 +315,7 @@ export const FEATURE_PAGES: FeaturePage[] = [
       "streamline-payroll-process-2026",
       "best-all-in-one-hrms-software-for-growing-businesses-in-2026",
       "payroll-software-pricing-in-india",
+      "hrms-vs-excel",
     ],
     relatedFeatureSlug: "attendance-management-software",
     relatedFeatureLabel: "Attendance Management Software",

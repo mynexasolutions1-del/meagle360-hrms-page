@@ -2119,9 +2119,10 @@
         overflow-x: hidden;
       }
       .admin-container {
-        max-width: 1000px;
+        max-width: 1600px;
+        width: 100%;
         margin: 0 auto;
-        padding: 48px 24px 80px;
+        padding: 48px 40px 80px;
       }
       .admin-header-row {
         display: flex;
@@ -2160,6 +2161,12 @@
         border-bottom: 1px solid rgba(226, 232, 240, 0.6);
         font-size: 15px;
         vertical-align: middle;
+        word-break: break-word;
+      }
+      .admin-table th:last-child,
+      .admin-table td:last-child {
+        width: 1%;
+        white-space: nowrap;
       }
       .admin-table tr {
         transition: background 0.2s ease;
@@ -2278,6 +2285,19 @@
       .admin-table-scroll {
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;
+      }
+      .admin-table-scroll::-webkit-scrollbar {
+        height: 6px;
+      }
+      .admin-table-scroll::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      .admin-table-scroll::-webkit-scrollbar-thumb {
+        background: rgba(0, 0, 0, 0.15);
+        border-radius: 4px;
+      }
+      .admin-table-scroll::-webkit-scrollbar-thumb:hover {
+        background: rgba(0, 0, 0, 0.25);
       }
       .admin-empty {
         padding: 80px 24px;
@@ -2657,6 +2677,91 @@
       }
 
       /* toast */
+      .cookie-consent-card {
+        position: fixed;
+        left: 20px;
+        bottom: 20px;
+        width: 380px;
+        max-width: calc(100vw - 40px);
+        /* Above the header (100), below the demo popup modal (300) — if
+           both happen to be open at once, the modal should win visually. */
+        z-index: 200;
+        background: linear-gradient(160deg, #1e1b4b 0%, #16142f 100%);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 18px;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+        padding: 22px;
+      }
+      .cookie-consent-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 12px;
+      }
+      .cookie-consent-icon {
+        flex-shrink: 0;
+        width: 38px;
+        height: 38px;
+        border-radius: 10px;
+        background: rgba(245, 158, 11, 0.15);
+        color: #f59e0b;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .cookie-consent-title {
+        margin: 0;
+        font-size: 16px;
+        font-weight: 700;
+        color: #fff;
+      }
+      .cookie-consent-desc {
+        margin: 0 0 14px;
+        font-size: 13.5px;
+        line-height: 1.6;
+        color: rgba(255, 255, 255, 0.7);
+      }
+      .cookie-consent-links {
+        margin: 0 0 18px;
+      }
+      .cookie-consent-links a {
+        font-size: 13px;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.85);
+        text-decoration: none;
+      }
+      .cookie-consent-links a:hover {
+        color: #fff;
+        text-decoration: underline;
+      }
+      .cookie-consent-actions {
+        display: flex;
+        gap: 10px;
+      }
+      .cookie-consent-actions .btn {
+        flex: 1;
+        justify-content: center;
+        padding: 11px 16px;
+        font-size: 13.5px;
+      }
+      .cookie-consent-actions .btn-outline {
+        background: transparent;
+        border-color: rgba(255, 255, 255, 0.2);
+        color: #fff;
+      }
+      .cookie-consent-actions .btn-outline:hover {
+        background: rgba(255, 255, 255, 0.08);
+        border-color: rgba(255, 255, 255, 0.35);
+        color: #fff;
+      }
+      @media (max-width: 480px) {
+        .cookie-consent-card {
+          left: 12px;
+          bottom: 12px;
+          width: calc(100vw - 24px);
+          padding: 18px;
+        }
+      }
       .toast {
         position: fixed;
         bottom: 26px;

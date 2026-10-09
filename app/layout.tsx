@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { Inter, Caveat } from "next/font/google";
-import Script from "next/script";
 import "./globals.css";
+import { GoogleAnalytics } from "./components/GoogleAnalytics";
+import { CookieConsentBanner } from "./components/CookieConsentBanner";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -83,23 +84,12 @@ export default function RootLayout({
     <html lang="en" className={`${inter.variable} ${caveat.variable}`}>
       <body>
         {children}
-        {/* Loads gtag.js only when a real GA4 ID is configured — see
-            .env.example. Conversion events themselves fire from
-            /thank-you via lib/analytics.ts. */}
-        {GA_ID && (
-          <>
-            <Script src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`} strategy="afterInteractive" />
-            <Script id="gtag-init" strategy="afterInteractive">
-              {`
-                window.dataLayer = window.dataLayer || [];
-                function gtag(){dataLayer.push(arguments);}
-                gtag('js', new Date());
-                gtag('config', '${GA_ID}');
-                ${ADS_ID ? `gtag('config', '${ADS_ID}');` : ""}
-              `}
-            </Script>
-          </>
-        )}
+        {/* Loads gtag.js only when a real GA4 ID is configured AND the
+            visitor has accepted cookies via CookieConsentBanner below — see
+            .env.example. Conversion events themselves fire from /thank-you
+            via lib/analytics.ts, which is already a safe no-op pre-consent. */}
+        {GA_ID && <GoogleAnalytics gaId={GA_ID} adsId={ADS_ID} />}
+        <CookieConsentBanner />
       </body>
     </html>
   );
